@@ -20,7 +20,7 @@ struct ExpenceInfo
 	double amount;
 	string description;
 };
-class CSVFunction
+class PersonalExpenceTracker
 {
 public:
 	void createFile();
@@ -46,7 +46,7 @@ public:
 	void calculateExpence();
 };
 
-string CSVFunction::hashPassword(string password)
+string PersonalExpenceTracker::hashPassword(string password)
 {
 	unsigned char hash[300];
 	SHA256((unsigned char *)password.c_str(), password.size(), hash);
@@ -59,7 +59,7 @@ string CSVFunction::hashPassword(string password)
 	retrun ss.str();
 }
 
-bool CSVFunction::registerUser(UserInfo userInfo)
+bool PersonalExpenceTracker::registerUser(UserInfo userInfo)
 {
 	ifstream file(USERS);
 	if (!file)
@@ -68,12 +68,12 @@ bool CSVFunction::registerUser(UserInfo userInfo)
 		return false;
 	}
 
-	file << userInfo.username << "," << CSVFunction::hashPassword(userInfo.password) << endl;
+	file << userInfo.username << "," << PersonalExpenceTracker::hashPassword(userInfo.password) << endl;
 	file.close();
 	return true;
 }
 
-bool CSVFunction::loginUser(UserInfo userInfo)
+bool PersonalExpenceTracker::loginUser(UserInfo userInfo)
 {
 	ifstream file(USERS);
 	if (!file)
@@ -88,7 +88,7 @@ bool CSVFunction::loginUser(UserInfo userInfo)
 		stringstream ss(line);
 		getline(ss, user, ',');
 		getline(ss, pass, ',');
-		if (user == userInfo.username && pass == CSVFunction::hashPassword(userInfo.password))
+		if (user == userInfo.username && pass == PersonalExpenceTracker::hashPassword(userInfo.password))
 		{
 			gUserName = user;
 			return true;
@@ -97,7 +97,7 @@ bool CSVFunction::loginUser(UserInfo userInfo)
 	return false;
 }
 
-void CSVFunction::createFile()
+void PersonalExpenceTracker::createFile()
 {
 	if (!fileExists(USERS))
 	{
@@ -122,7 +122,7 @@ void CSVFunction::createFile()
 	}
 }
 
-void CSVFunction::readFile()
+void PersonalExpenceTracker::readFile()
 {
 	ifstream file(TRANSACTIONS);
 	if (!file)
@@ -148,7 +148,7 @@ void CSVFunction::readFile()
 	}
 }
 
-void CSVFunction::saveData(ExpenceInfo expenceInfo)
+void PersonalExpenceTracker::saveData(ExpenceInfo expenceInfo)
 {
 	ofstream file(TRANSACTIONS, ios::app);
 	if (!file)
@@ -161,6 +161,13 @@ void CSVFunction::saveData(ExpenceInfo expenceInfo)
 	file.close();
 }
 
+void PersonalExpenceTracker::updateData(ExpenceInfo expenceInfo)
+{
+}
+
+void PersonalExpenceTracker::deleteDocument(ExpenceInfo expenceInfo)
+{
+}
 int main()
 {
 
