@@ -267,21 +267,24 @@ void PersonalExpenseTracker::run()
 		switch (choice)
 		{
 		case 1:
-			cout << "Enter username: ";
-			cin >> userInfo.username;
-			cout << "Enter password: ";
-			cin >> userInfo.password;
+            do
+             {
+             	cout << "Enter username: ";
+				cin >> userInfo.username;
+				cout << "Enter password: ";
+				cin >> userInfo.password;
 
-			if (loginUser(userInfo))
-			{
-				cout << "Login successful! Welcome, " << gUserName << "!\n";
-				break;
-			}
-			else
-			{
-				cout << "Invalid username or password! Please try again.\n";
-			}
-			continue; // Return to the main menu after login failure.
+				if (loginUser(userInfo))
+				{
+					cout << "Login successful! Welcome, " << gUserName << "!\n";
+					break;
+				}
+				else
+				{
+					cout << "Invalid username or password! Please try again.\n";
+				}
+             } while (true);
+             break;
 
 		case 2:
 			cout << "Enter a new username: ";
@@ -307,7 +310,7 @@ void PersonalExpenseTracker::run()
 			cout << "Invalid choice! Please try again.\n";
 		}
 	} while (choice != 1);
-
+    ExpenseInfo expenseInfo;
 	// Main application menu after successful login.
 	do
 	{
@@ -324,21 +327,22 @@ void PersonalExpenseTracker::run()
 		switch (choice)
 		{
 		case 1:
-			ExpenseInfo expenseInfo = parseExpenseInfo();
+			expenseInfo = parseExpenseInfo();
 			saveData(expenseInfo);
 			break;
 
 		case 2:
-			ExpenseInfo expenseInfo = parseExpenseInfo();
+			expenseInfo = parseExpenseInfo();
 			updateData(expenseInfo);
 			break;
 
 		case 3:
 			readFile();
+			cout << "\n\n";
 			break;
 
 		case 4:
-			ExpenseInfo expenseInfo = parseExpenseInfo();
+			expenseInfo = parseExpenseInfo();
 			deleteDocument(expenseInfo);
 			break;
 
