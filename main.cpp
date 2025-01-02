@@ -3,6 +3,9 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iomanip>
+#include <cstdlib>
+
 
 using namespace std;
 
@@ -81,6 +84,7 @@ bool PersonalExpenseTracker::loginUser(UserInfo userInfo)
 			return true;
 		}
 	}
+	file.close();
 	return false;
 }
 
@@ -112,6 +116,10 @@ void PersonalExpenseTracker::readFile()
 
 	string line, user, type, description;
 	double amount;
+	cout << left << setw(15) << "Type"
+         << setw(15) << "Amount"
+         << setw(30) << "Description" << endl;
+    cout << string(60, '-') << endl;
 	while (getline(file, line))
 	{
 		stringstream ss(line);
@@ -125,8 +133,11 @@ void PersonalExpenseTracker::readFile()
 		{
 			continue;
 		}
-		cout << type << "\t" << amount << "\t" << description << endl;
+		cout << left << setw(15) << type
+             << setw(15) << fixed << setprecision(2) << amount
+             << setw(30) << description << endl;
 	}
+	file.close();
 }
 
 void PersonalExpenseTracker::saveData(ExpenseInfo expenseInfo)
@@ -249,12 +260,21 @@ ExpenseInfo parseExpenseInfo()
 	return expenseInfo;
 }
 
+void clearScreen() {
+	#ifdef _WIN32
+		system("cls");
+	#else
+		system("clear");
+	#endif
+}
+
 void PersonalExpenseTracker::run()
 {
 	createFile();
 	int choice;
 	do
 	{
+		clearScreen();
 		cout << "\nWelcome to Personal Expense Tracker\n";
 		cout << "1. Login\n";
 		cout << "2. Register\n";
@@ -263,6 +283,7 @@ void PersonalExpenseTracker::run()
 		cin >> choice;
 
 		UserInfo userInfo;
+		clearScreen();
 
 		switch (choice)
 		{
@@ -284,6 +305,7 @@ void PersonalExpenseTracker::run()
 					cout << "Invalid username or password! Please try again.\n";
 				}
              } while (true);
+			 clearScreen();
              break;
 
 		case 2:
@@ -291,7 +313,7 @@ void PersonalExpenseTracker::run()
 			cin >> userInfo.username;
 			cout << "Enter a new password: ";
 			cin >> userInfo.password;
-
+			clearScreen();
 			if (registerUser(userInfo))
 			{
 				cout << "Registration successful! You can now log in.\n";
@@ -314,6 +336,7 @@ void PersonalExpenseTracker::run()
 	// Main application menu after successful login.
 	do
 	{
+		clearScreen();
 		cout << "\nMenu:\n";
 		cout << "1. Add Expense\n";
 		cout << "2. Edit Expense\n";
@@ -338,7 +361,8 @@ void PersonalExpenseTracker::run()
 
 		case 3:
 			readFile();
-			cout << "\n\n";
+			cout << "Press Enter to continue...";
+			cin.ignore();
 			break;
 
 		case 4:
